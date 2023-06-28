@@ -11,7 +11,7 @@ on:
         required: false
 
 env:
-  AZURE_ARTIFACTS_FEED_URL: https://dev.azure.com/willowdev/Twin%20Platform/_artifacts/feed/WillowNuGet/nuget/v3/index.json    
+  AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/willowdev/_packaging/WillowNuGet/nuget/v3/index.json    
   NUGET_AUTH_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }} 
 
 jobs:
