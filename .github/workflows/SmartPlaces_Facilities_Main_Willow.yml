@@ -1,0 +1,31 @@
+name: Trigger Package Generation
+
+on:
+  pull_request:
+    branches: [
+      "main",
+    ]
+    paths: [
+      '.github/**',
+      'SmartPlaces.Facilities/**',
+    ]
+
+env: 
+  DOTNET_VERSION: '6.x' 
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+      - name: "build-force"
+        uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
+        with:
+          build-type: 'Main Official (ASPEN)'
+
+      - name: Package
+        shell: pwsh
+        run: "& ./.github/workflows/scripts/buildandpack.ps1"
