@@ -16,7 +16,7 @@ foreach($solution in $(Get-Solutions)) {
             throw
         }
 
-        dotnet nuget push --api-key AzureArtifacts bin/Release/**/*.nupkg 
+        dotnet nuget push $AZURE_ARTIFACTS_FEED_URL --api-key $NUGET_AUTH_TOKEN bin/Release/**/*.nupkg --skip-duplicate
 
     pop-location
 }
