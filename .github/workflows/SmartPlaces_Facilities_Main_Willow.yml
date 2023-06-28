@@ -15,17 +15,13 @@ env:
 
 jobs:
 
+  - uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
+    with:
+      build-type: 'Main Official (ASPEN)'
+  
   build:
-
-    runs-on: windows-latest
-
     steps:
 
-      - name: "build-force"
-        uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
-        with:
-          build-type: 'Main Official (ASPEN)'
-
-      - name: Package
-        shell: pwsh
-        run: "& ./.github/workflows/scripts/buildandpack.ps1"
+    - name: Package
+      shell: pwsh
+      run: "& ./.github/workflows/scripts/buildandpack.ps1"
