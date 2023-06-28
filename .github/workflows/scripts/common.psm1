@@ -7,7 +7,7 @@ function Get-Root {
 }
 
 function Get-Solutions {
-    $list = @(Get-ChildItem $root/SmartPlaces.Facilities -File -Recurse | Where-Object {($_.FullName -like "*.sln")})
+    $list = @(Get-ChildItem $root/SmartPlaces.Facilities/lib -File -Recurse | Where-Object {($_.FullName -like "*.sln")})
     return $list
 }
 

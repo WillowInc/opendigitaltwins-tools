@@ -8,7 +8,9 @@ $NUGET_AUTH_TOKEN = $env:NUGET_AUTH_TOKEN
 foreach($solution in $(Get-Solutions)) {
     Write-Output "Building '$solution' using dotnet command line." 
 
-    push-location $(Split-Path $solution -Parent)
+    $rootPath =  $(Split-Path $solution -Parent)
+
+    push-location $rootPath
         Show-SDKs
 
         dotnet pack $solution --no-restore -c Release /bl:"$solution.build.binlog" "/flp1:errorsOnly;logfile=$solution.Errors.log"
@@ -19,7 +21,7 @@ foreach($solution in $(Get-Solutions)) {
             throw
         }
 
-        dotnet nuget push --api-key $NUGET_AUTH_TOKEN --source $(Split-Path $solution -Parent)/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --skip-duplicate
+        dotnet nuget push --api-key $NUGET_AUTH_TOKEN --source $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --skip-duplicate
 
     pop-location
 }
