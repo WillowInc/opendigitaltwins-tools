@@ -15,11 +15,14 @@ env:
 
 jobs:
 
-  - uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
+  prep:
+    uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
     with:
       build-type: 'Main Official (ASPEN)'
+    secrets: inherit
   
   build:
+    runs-on: windows-latest
     steps:
 
     - name: Package
