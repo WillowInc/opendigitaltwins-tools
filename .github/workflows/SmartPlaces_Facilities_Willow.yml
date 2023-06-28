@@ -33,3 +33,7 @@ jobs:
     - name: Test
       shell: pwsh
       run: "& ./.github/workflows/scripts/test.ps1"
+      
+    - name: Package
+      shell: pwsh
+      run: "& ./.github/workflows/scripts/buildandpack.ps1"

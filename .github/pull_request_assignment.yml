@@ -4,5 +4,4 @@
       - ".github/**"
       - "SmartPlaces.Facilities/**"
     reviewers:
-      - "Tyler-Angell"
-      - "hammar"
+      - "joebeernink"
