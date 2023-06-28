@@ -1,7 +1,7 @@
 name: Trigger Package Generation
 
 on:
-  pull_request:
+  push:
     branches: [
       "main",
     ]
@@ -14,17 +14,8 @@ env:
   DOTNET_VERSION: '6.x' 
 
 jobs:
-
-  prep:
-    uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities.yml@main'
+  build:
+    uses: 'WillowInc/opendigitaltwins-tools/.github/workflows/SmartPlaces_Facilities_Willow.yml@main'
     with:
       build-type: 'Main Official (ASPEN)'
     secrets: inherit
-  
-  build:
-    runs-on: windows-latest
-    steps:
-
-    - name: Package
-      shell: pwsh
-      run: "& ./.github/workflows/scripts/buildandpack.ps1"
