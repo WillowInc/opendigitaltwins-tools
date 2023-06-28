@@ -21,7 +21,7 @@ foreach($solution in $(Get-Solutions)) {
             throw
         }
 
-        dotnet nuget push --api-key $NUGET_AUTH_TOKEN --source $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --skip-duplicate
+        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key $NUGET_AUTH_TOKEN --source $AZURE_ARTIFACTS_FEED_URL --skip-duplicate
 
     pop-location
 }
