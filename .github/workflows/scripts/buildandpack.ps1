@@ -2,6 +2,9 @@ Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 Import-Module "$PSScriptRoot/common.psm1" -Force
 
+$AZURE_ARTIFACTS_FEED_URL = $env:AZURE_ARTIFACTS_FEED_URL
+$NUGET_AUTH_TOKEN = $env:NUGET_AUTH_TOKEN
+
 foreach($solution in $(Get-Solutions)) {
     Write-Output "Building '$solution' using dotnet command line." 
 
