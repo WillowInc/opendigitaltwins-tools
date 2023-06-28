@@ -9,12 +9,14 @@ foreach($solution in $(Get-Solutions)) {
         Show-SDKs
 
         dotnet pack $solution --no-restore -c Release /bl:"$solution.build.binlog" "/flp1:errorsOnly;logfile=$solution.Errors.log"
-
         if (! $?) {
             $rawError = $(Get-Content -Raw "$solution.Errors.log")
             Write-Error "Failed to build $solution. Error: $rawError"
             pop-location
             throw
         }
+
+        dotnet nuget push --api-key AzureArtifacts bin/Release/**/*.nupkg 
+
     pop-location
 }
