@@ -1,5 +1,6 @@
 param (
-    [Parameter(Mandatory=$true)] [string]$authToken
+    [Parameter(Mandatory=$true)] [string]$authToken,
+    [Parameter(Mandatory=$true)] [string]$githubToken
     )
 
 Set-StrictMode -Version latest
@@ -22,8 +23,8 @@ foreach($solution in $(Get-Solutions)) {
             throw
         }
 
+        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$githubToken" --source "github" --skip-duplicate
 
-        Write-Output ($authToken | sed 's/./& /g')
-        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$authToken" --source "github" --skip-duplicate
-    pop-location
+        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$authToken" --source "WillowNuGet" --skip-duplicate
+        pop-location
 }
