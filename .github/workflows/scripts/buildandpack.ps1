@@ -22,7 +22,7 @@ foreach($solution in $(Get-Solutions)) {
             throw
         }
 
-        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$githubToken" --source "github" --skip-duplicate
+        dotnet nuget push $rootPath/src/bin/Release/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$githubToken" --source "github" --skip-duplicate
 
         pop-location
 }
