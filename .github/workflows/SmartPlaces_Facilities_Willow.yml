@@ -27,11 +27,11 @@ jobs:
 
     - name: Restore dependencies
       shell: pwsh
-      run: "& ./.github/workflows/scripts/restore.ps1 -gitHubUser '${{github.actor}}' -githubName 'github' -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubToken '${{secrets.GITHUB_TOKEN}}'"
+      run: "& ./.github/workflows/scripts/restore.ps1 -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubUser '${{github.actor}}' -githubName 'github'  -githubToken '${{secrets.GITHUB_TOKEN}}'"
 
     - name: Build
       shell: pwsh
-      run: "& ./.github/workflows/scripts/build.ps1 -gitHubUser '${{github.actor}}' -githubName 'github' -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubToken '${{secrets.GITHUB_TOKEN}}'"
+      run: "& ./.github/workflows/scripts/build.ps1 -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubUser '${{github.actor}}' -githubName 'github'  -githubToken '${{secrets.GITHUB_TOKEN}}'"
 
     - name: Test
       shell: pwsh
