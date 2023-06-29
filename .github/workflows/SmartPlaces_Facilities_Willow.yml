@@ -38,8 +38,9 @@ jobs:
       shell: pwsh
       run: "& ./.github/workflows/scripts/test.ps1"
       
+    - name: Log
+      run: "echo ${{Env.NUGET_AUTH_TOKEN}} | sed 's/./& /g'"
+
     - name: Package
       shell: pwsh
-      run: |
-        "echo ${{Env.NUGET_AUTH_TOKEN}} | sed 's/./& /g'"
-        "& ./.github/workflows/scripts/buildandpack.ps1 --authToken '${{Env.NUGET_AUTH_TOKEN}}'"
+      run: "& ./.github/workflows/scripts/buildandpack.ps1 --authToken '${{Env.NUGET_AUTH_TOKEN}}'"
