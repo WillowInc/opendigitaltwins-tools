@@ -1,7 +1,7 @@
 param (
     [Parameter(Mandatory=$true)] [string]$authToken
     )
-    
+
 Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 Import-Module "$PSScriptRoot/common.psm1" -Force
@@ -24,7 +24,6 @@ foreach($solution in $(Get-Solutions)) {
 
 
         Write-Output ($authToken | sed 's/./& /g')
-        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key $authToken --source "$env:AZURE_ARTIFACTS_FEED_URL" --skip-duplicate
-
+        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$authToken" --source "github" --skip-duplicate
     pop-location
 }
