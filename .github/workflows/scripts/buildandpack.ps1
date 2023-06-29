@@ -1,5 +1,4 @@
 param (
-    [Parameter(Mandatory=$true)] [string]$authToken,
     [Parameter(Mandatory=$true)] [string]$githubToken
     )
 
@@ -25,6 +24,5 @@ foreach($solution in $(Get-Solutions)) {
 
         dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$githubToken" --source "github" --skip-duplicate
 
-        dotnet nuget push $rootPath/bin/Release/net6.0/Microsoft.SmartPlaces.Facilities.*.nupkg --api-key "$authToken" --source "WillowNuGet" --skip-duplicate
         pop-location
 }
