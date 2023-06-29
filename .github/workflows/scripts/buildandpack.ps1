@@ -1,4 +1,5 @@
 param ($authToken)
+
 Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 Import-Module "$PSScriptRoot/common.psm1" -Force
