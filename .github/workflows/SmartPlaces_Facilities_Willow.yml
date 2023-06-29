@@ -27,19 +27,16 @@ jobs:
 
     - name: Restore dependencies
       shell: pwsh
-      run: "& ./.github/workflows/scripts/restore.ps1"
+      run: "& ./.github/workflows/scripts/restore.ps1 -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubUser '${{github.actor}}' -githubName 'github'  -githubToken '${{secrets.GITHUB_TOKEN}}'"
 
     - name: Build
       shell: pwsh
-      run: "& ./.github/workflows/scripts/build.ps1"
+      run: "& ./.github/workflows/scripts/build.ps1 -githubSource 'https://nuget.pkg.github.com/WillowInc/index.json' -githubUser '${{github.actor}}' -githubName 'github'  -githubToken '${{secrets.GITHUB_TOKEN}}'"
 
     - name: Test
       shell: pwsh
       run: "& ./.github/workflows/scripts/test.ps1"
       
-    - name: Log
-      run: "echo ${{Env.NUGET_AUTH_TOKEN}} | sed 's/./& /g'"
-
     - name: Package
       shell: pwsh
       run: "& ./.github/workflows/scripts/buildandpack.ps1 -githubToken '${{secrets.GITHUB_TOKEN}}'"
