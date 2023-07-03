@@ -4,8 +4,8 @@
 namespace Microsoft.SmartPlaces.Facilities.OntologyMapper.Test
 {
     using System.Reflection;
-    using Microsoft.Azure.DigitalTwins.Parser;
-    using Microsoft.Azure.DigitalTwins.Parser.Models;
+    using DTDLParser;
+    using DTDLParser.Models;
     using Microsoft.SmartPlaces.Facilities.OntologyMapper;
     using Moq;
     using Xunit;
@@ -494,7 +494,7 @@ namespace Microsoft.SmartPlaces.Facilities.OntologyMapper.Test
 
         private static IReadOnlyDictionary<Dtmi, DTEntityInfo> GetTargetObjectModel()
         {
-            var objectModelParser = new ModelParser();
+            var objectModelParser = new ModelParser(new ParsingOptions(){AllowUndefinedExtensions = WhenToAllow.Always});
             var jsonTexts = LoadDtdl("Space.json");
             return objectModelParser.Parse(jsonTexts);
         }
