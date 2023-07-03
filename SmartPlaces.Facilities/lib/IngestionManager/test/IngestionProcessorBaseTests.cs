@@ -431,6 +431,41 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Test
         }
 
         [Fact]
+        public async Task GetTwin_ObjectTransform_WhenNullObjectSpecified()
+        {
+            var mockedIngestionProcessor = new MockedIngestionProcessor<IngestionManagerOptions>(mockLogger.Object,
+                                                                        telemetryClient,
+                                                                        mockInputGraphManager.Object,
+                                                                        ontologyMappingManager,
+                                                                        new DefaultGraphNamingManager(),
+                                                                        mockOutputGraphManager.Object);
+
+            var expectedDtmi = "dtmi:org:w3id:rec:SpaceWithUnit;1";
+            await mockedIngestionProcessor.IngestFromApiAsync(CancellationToken.None);
+            IDictionary<string, BasicDigitalTwin> twins = new Dictionary<string, BasicDigitalTwin>();
+            JsonElement jsonElement = GetJsonElementWithNullUnit();
+            string basicDtId = "CLSKkDFMgbojZZ54MorD6B11P";
+            string interfaceType = "SpaceWithUnit";
+
+            var result = mockedIngestionProcessor.TestGetTwin(twins, jsonElement, basicDtId, interfaceType);
+
+            Assert.NotNull(result);
+            Assert.Equal(expectedDtmi, result?.ToString());
+            Assert.Single(twins);
+            Assert.Equal(basicDtId, twins.First().Key);
+            Assert.Equal(basicDtId, twins.First().Value.Id);
+            Assert.Equal(expectedDtmi, twins.First().Value.Metadata.ModelId);
+            Assert.Equal(2, twins.First().Value.Contents.Count);
+
+            var contents = twins.First().Value.Contents as IDictionary<string, object>;
+            var externalIds = contents["externalIds"] as IDictionary<string, string>;
+            Assert.NotNull(externalIds);
+            Assert.Equal("12345", externalIds?["mappingKey"]);
+            Assert.Equal("678", externalIds?["deviceId"]);
+            Assert.False(contents.TryGetValue("unit", out var resVal));
+        }
+
+        [Fact]
         public async Task GetRelationship_GetsRelationship_WhenValidRelationship()
         {
             var mockedIngestionProcessor = new MockedIngestionProcessor<IngestionManagerOptions>(mockLogger.Object,
@@ -559,6 +594,12 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Test
         private static JsonElement GetJsonElementWithMultipleKeys()
         {
             var doc = JsonDocument.Parse("{ \"id\": \"CLSKkDFMgbojZZ54MorD6B11P\", \"exactType\": \"SpaceWithBox\", \"mappingKey\": \"12345\", \"deviceId\": \"678\", \"unit\": { \"id\": \"A\" } }");
+            return doc.RootElement;
+        }
+
+        private static JsonElement GetJsonElementWithNullUnit()
+        {
+            var doc = JsonDocument.Parse("{ \"id\": \"CLSKkDFMgbojZZ54MorD6B11P\", \"exactType\": \"SpaceWithBox\", \"mappingKey\": \"12345\", \"deviceId\": \"678\", \"unit\": null }");
             return doc.RootElement;
         }
 

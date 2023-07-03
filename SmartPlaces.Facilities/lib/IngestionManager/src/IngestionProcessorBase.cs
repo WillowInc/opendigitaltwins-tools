@@ -487,13 +487,16 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager
                 // Get the value of the input property
                 if (sourceElement.TryGetProperty(objectTransformation.InputProperty, out var inputProperty))
                 {
-                    // Get the value of the input property
-                    if (inputProperty.TryGetProperty(objectTransformation.InputPropertyName, out var inputPropertyValue))
+                    if (inputProperty.ValueKind == JsonValueKind.Object)
                     {
-                        if (!contentDictionary.TryAdd(objectTransformation.OutputPropertyName, inputPropertyValue.ToString()))
+                        // Get the value of the input property
+                        if (inputProperty.TryGetProperty(objectTransformation.InputPropertyName, out var inputPropertyValue))
                         {
-                            Logger.LogWarning("Duplicate target property: '{outputPropertyName}' with InterfaceType: '{interfaceType}' for DTMI: '{dtId}'.", objectTransformation.OutputPropertyName, interfaceType, basicDtId);
-                            TelemetryClient.GetMetric(duplicateMappingPropertyFoundMetricIdentifier).TrackValue(1, objectTransformation.OutputPropertyName);
+                            if (!contentDictionary.TryAdd(objectTransformation.OutputPropertyName, inputPropertyValue.ToString()))
+                            {
+                                Logger.LogWarning("Duplicate target property: '{outputPropertyName}' with InterfaceType: '{interfaceType}' for DTMI: '{dtId}'.", objectTransformation.OutputPropertyName, interfaceType, basicDtId);
+                                TelemetryClient.GetMetric(duplicateMappingPropertyFoundMetricIdentifier).TrackValue(1, objectTransformation.OutputPropertyName);
+                            }
                         }
                     }
                 }
