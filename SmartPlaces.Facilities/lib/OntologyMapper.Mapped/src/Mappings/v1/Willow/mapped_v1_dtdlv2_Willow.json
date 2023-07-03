@@ -3922,6 +3922,10 @@
       "OutputDtmi": "dtmi:com:willowinc:Room;1"
     },
     {
+      "InputDtmi": "dtmi:mapped:core:Sensor_Equipment;1",
+      "OutputDtmi": "dtmi:com:willowinc:SensorEquipment;1"
+    },
+    {
       "InputDtmi": "dtmi:org:brickschema:schema:Brick:Sensor_Failure_Alarm;1",
       "OutputDtmi": "dtmi:com:willowinc:AlarmSensor;1"
     },
