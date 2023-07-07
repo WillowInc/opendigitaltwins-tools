@@ -29,7 +29,7 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped.Extensions
                     .ValidateDataAnnotations()
                     .ValidateOnStart();
 
-            services.AddSingleton<IInputGraphManager, MappedGraphManager>();
+            services.AddSingleton<IInputGraphManager, MappedGeneratedGraphManager>();
             services.AddSingleton<IGraphIngestionProcessor, MappedGraphIngestionProcessor<MappedIngestionManagerOptions>>();
 
             services.AddIngestionManager(options);
