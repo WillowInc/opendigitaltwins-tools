@@ -288,27 +288,33 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
                 {
                     foreach (var dataThingElement in topThingElement.Value.EnumerateObject())
                     {
-                        foreach (var thingElement in dataThingElement.Value.EnumerateArray())
+                        if (dataThingElement.Value.ValueKind == JsonValueKind.Array)
                         {
-                            foreach (var pointsElement in thingElement.EnumerateObject())
+                            foreach (var thingElement in dataThingElement.Value.EnumerateArray())
                             {
-                                foreach (var pointElement in pointsElement.Value.EnumerateArray())
+                                foreach (var pointsElement in thingElement.EnumerateObject())
                                 {
-                                    // Get the Id of the individual item in the graph
-                                    if (!pointElement.TryGetProperty("id", out var pointIdProp))
+                                    if (pointsElement.Value.ValueKind == JsonValueKind.Array)
                                     {
-                                        return;
-                                    }
+                                        foreach (var pointElement in pointsElement.Value.EnumerateArray())
+                                        {
+                                            // Get the Id of the individual item in the graph
+                                            if (!pointElement.TryGetProperty("id", out var pointIdProp))
+                                            {
+                                                return;
+                                            }
 
-                                    var pointDtId = pointIdProp.ToString();
+                                            var pointDtId = pointIdProp.ToString();
 
-                                    // Look up the Model Id from the Incoming element
-                                    if (pointElement.TryGetProperty("exactType", out var pointExactType))
-                                    {
-                                        AddTwin(twins, pointElement, pointDtId, pointExactType.ToString());
-                                        var relationshipProperties = new Dictionary<string, object>();
+                                            // Look up the Model Id from the Incoming element
+                                            if (pointElement.TryGetProperty("exactType", out var pointExactType))
+                                            {
+                                                AddTwin(twins, pointElement, pointDtId, pointExactType.ToString());
+                                                var relationshipProperties = new Dictionary<string, object>();
 
-                                        AddRelationship(relationships, thingDtId, thingDtmi, "hasPoint", pointDtId, pointExactType.ToString(), relationshipProperties);
+                                                AddRelationship(relationships, thingDtId, thingDtmi, "hasPoint", pointDtId, pointExactType.ToString(), relationshipProperties);
+                                            }
+                                        }
                                     }
                                 }
                             }
