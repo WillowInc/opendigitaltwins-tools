@@ -106,7 +106,6 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
                     .WithAllScalarFields()
                     .WithBuildings(
                         new BuildingQueryBuilder()
-                        .WithAddress(new AddressQueryBuilder().WithAllScalarFields())
                         .WithAllScalarFields()
                         .WithFloors(new FloorQueryBuilder().WithAllScalarFields())
                         .WithIdentities(new BuildingIdentityUnionQueryBuilder().WithAllFields()),
