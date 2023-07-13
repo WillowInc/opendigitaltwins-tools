@@ -219,9 +219,8 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
 
                 if (locationElement.Value.ValueKind != JsonValueKind.Null && locationElement.Value.ValueKind != JsonValueKind.Undefined)
                 {
-                    if (locationElement.Value.TryGetProperty("id", out var locationIdProp))
+                    if (GetTwinId(locationElement.Value, out var locationId))
                     {
-                        var locationId = locationIdProp.GetString();
                         var relationshipProperties = new Dictionary<string, object>();
 
                         if (locationId != null)
@@ -244,10 +243,8 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
                     {
                         var relationshipProperties = new Dictionary<string, object>();
 
-                        if (fedByElement.TryGetProperty("id", out var idProp))
+                        if (GetTwinId(fedByElement, out var fedById))
                         {
-                            var fedById = idProp.GetString();
-
                             if (fedById != null)
                             {
                                 var fedByProperties = fedByElement.EnumerateObject().FirstOrDefault(t => t.Name == "properties");
@@ -272,6 +269,46 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
 
                 await GetPointsAsync(twins, relationships, thingDtId, thingDtmi).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Get the Willow Id value for the twin. If the twin has an identity with a source of Willow, then use that value. Otherwise used the Mapped Id value.
+        /// </summary>
+        /// <param name="twinElement">The Jsont that contains the twin</param>
+        /// <param name="id">The calculated id value</param>
+        /// <returns>True if id is found, false if not</returns>
+        private static bool GetTwinId(JsonElement twinElement, out string id)
+        {
+            JsonElement idProp;
+            id = string.Empty;
+
+            if (!twinElement.TryGetProperty("id", out idProp))
+            {
+                return false;
+            }
+
+            id = idProp.ToString();
+
+            var identityProperty = twinElement.EnumerateObject().FirstOrDefault(t => t.Name == "identities");
+
+            if (identityProperty.Value.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var identity in identityProperty.Value.EnumerateArray())
+                {
+                    // Note that for now, there is only ever one non-null identity in the array. This will be fixed by Mapped soon, and this
+                    // will need to be fixed
+                    if (identity.TryGetProperty("value", out var identityValue))
+                    {
+                        if (identityValue.ValueKind == JsonValueKind.String)
+                        {
+                            id = identityValue.ToString();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         private async Task GetPointsAsync(IDictionary<string, BasicDigitalTwin> twins, IDictionary<string, BasicRelationship> relationships, string thingDtId, Dtmi? thingDtmi)
@@ -299,12 +336,10 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
                                         foreach (var pointElement in pointsElement.Value.EnumerateArray())
                                         {
                                             // Get the Id of the individual item in the graph
-                                            if (!pointElement.TryGetProperty("id", out var pointIdProp))
+                                            if (!GetTwinId(pointElement, out var pointDtId))
                                             {
                                                 return;
                                             }
-
-                                            var pointDtId = pointIdProp.ToString();
 
                                             // Look up the Model Id from the Incoming element
                                             if (pointElement.TryGetProperty("exactType", out var pointExactType))
@@ -367,9 +402,8 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
 
                 if (sourceElement != null && !string.IsNullOrWhiteSpace(relationshipType) && targetElement.ValueKind != JsonValueKind.Array)
                 {
-                    if (sourceElement.Value.TryGetProperty("id", out var idProp))
+                    if (GetTwinId(sourceElement.Value, out var sourceDtId))
                     {
-                        var sourceDtId = idProp.ToString();
                         var sourceExactType = sourceElement.Value.GetProperty("exactType").ToString();
                         var sourceDtmi = GetInputInterfaceDtmi(sourceExactType);
 
