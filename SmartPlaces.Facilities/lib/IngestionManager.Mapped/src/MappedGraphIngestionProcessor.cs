@@ -274,9 +274,9 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
         /// <summary>
         /// Get the Willow Id value for the twin. If the twin has an identity with a source of Willow, then use that value. Otherwise used the Mapped Id value.
         /// </summary>
-        /// <param name="twinElement">The Jsont that contains the twin</param>
-        /// <param name="id">The calculated id value</param>
-        /// <returns>True if id is found, false if not</returns>
+        /// <param name="twinElement">The Json that contains the twin.</param>
+        /// <param name="id">The calculated id value.</param>
+        /// <returns>True if id is found, false if not.</returns>
         private static bool GetTwinId(JsonElement twinElement, out string id)
         {
             JsonElement idProp;
@@ -296,7 +296,7 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
                 foreach (var identity in identityProperty.Value.EnumerateArray())
                 {
                     // Note that for now, there is only ever one non-null identity in the array. This will be fixed by Mapped soon, and this
-                    // will need to be fixed
+                    // will need to be fixed.
                     if (identity.TryGetProperty("value", out var identityValue))
                     {
                         if (identityValue.ValueKind == JsonValueKind.String)
