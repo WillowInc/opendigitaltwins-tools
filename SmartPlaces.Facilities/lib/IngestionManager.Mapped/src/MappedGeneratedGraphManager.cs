@@ -180,23 +180,22 @@ namespace Microsoft.SmartPlaces.Facilities.IngestionManager.Mapped
         }
 
         /// <summary>
-        /// Creates a query that returns all the floors associated to a building.
+        /// Creates a query that returns all spaces on a floor.
         /// </summary>
-        /// <param name="buildingDtId">Building to search.</param>
+        /// <param name="floorId">floor to search.</param>
         /// <returns>A formatted graph query.</returns>
-        public virtual string GetFloorQuery(string buildingDtId)
+        public virtual string GetFloorQuery(string floorId)
         {
-            var buildingIdParameter = new GraphQlQueryParameter<BuildingFilter>("buildingId", new BuildingFilter() { Id = new IdFilterExpressionInput() { Eq = buildingDtId } });
+            var floorIdParameter = new GraphQlQueryParameter<FloorFilter>("floorId", new FloorFilter() { Id = new StringFilterExpressionInput() { Eq = floorId } });
 
             var queryBuilder = new QueryQueryBuilder()
-                .WithBuildings(new BuildingQueryBuilder()
                 .WithFloors(new FloorQueryBuilder()
                     .WithAllScalarFields()
                     .WithIdentities(new FloorIdentityUnionQueryBuilder().WithAllFields())
                     .WithHasPart(new PlaceQueryBuilder().WithAllScalarFields())
-                    .WithZones(new ZoneQueryBuilder().WithAllScalarFields())),
-                    buildingIdParameter)
-                .WithParameter(buildingIdParameter);
+                    .WithZones(new ZoneQueryBuilder().WithAllScalarFields()),
+                    floorIdParameter)
+                .WithParameter(floorIdParameter);
 
             var query = queryBuilder.Build().ToString();
             return query;
